@@ -23,8 +23,9 @@ package cmd
 
 import (
 	"os"               // Used for handling OS-level stuff like exit codes
-	"fmt"              // For printing output to the terminal
-
+	"fmt"             // For printing output to the terminal
+	"log"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra" // Core CLI framework
 	// "github.com/spf13/viper" // For config management (if using --viper flag or config files)
 )
@@ -42,6 +43,8 @@ you accomplish your goals.`,
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
 }
+
+var datafile string
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -62,6 +65,13 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
+	home , err  :=  homedir.Dir();
+	if err != nil{
+		log.Println("Unable to detect Home Directory. Please set data file path using  --datafile.")
+
+	}
+	// adding flag
+	rootCmd.PersistentFlags().StringVar(&datafile, "datafile" , home+string(os.PathSeparator)+"tasks.json","data file to store todos")
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 

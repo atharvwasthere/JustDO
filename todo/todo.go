@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 type Item struct{
 	Text string
 	Priority int
+	Position int
 }
 // Item is exporteddd
 
@@ -39,6 +41,21 @@ func  (i*Item) SetPriority(pri int){
 
 	}
 }
+func  (i*Item) PrettyP() string{
+	if i.Priority == 1{
+		return "(1)"
+	}
+	if i.Priority == 3{
+		return "(3)"
+	}
+	return " "
+}
+
+func (i*Item) Label() string {
+	return strconv.Itoa(i.Position) + "."
+}
+
+
 
 func ReadItems(filename string )  ([]Item , error) {
 	anytask, err := os.ReadFile(filename)
@@ -50,6 +67,10 @@ func ReadItems(filename string )  ([]Item , error) {
 	if err != nil{
 		return []Item {} , err
 	}
+	for i,_ := range items{
+		items[i].Position = i + 1 //  i is basically index here 
+	}
+
 	return items , nil
 	
 }

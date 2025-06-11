@@ -25,6 +25,21 @@ func SaveItems(filename string , items []Item) error {
 	return nil
 }
 
+func  (i*Item) SetPriority(pri int){
+	switch pri {
+	// can procastinate	
+	case 1 :
+		i.Priority = 1
+	// high
+	case 3 :
+		i.Priority = 3
+	// med if not specified 
+	default :
+		i.Priority = 2
+
+	}
+}
+
 func ReadItems(filename string )  ([]Item , error) {
 	anytask, err := os.ReadFile(filename)
 	if err != nil{

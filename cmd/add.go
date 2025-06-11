@@ -25,6 +25,8 @@ var addCmd = &cobra.Command{
 	// 	}
 	// },
 }
+
+var priority int
 /* 
 cmd and args are standard parameters Cobra gives you:
 
@@ -43,6 +45,7 @@ func taskExists(items []todo.Item, newText string ) bool{
 	return false
 }
 
+
 func addRun(cmd *cobra.Command, args []string){
 	var items = []todo.Item{} 
 	//"C:/Users/athar/desktop/CS/Golang/Learning CLI/tasks.json"
@@ -53,11 +56,14 @@ func addRun(cmd *cobra.Command, args []string){
 	}
 	for _,x := range args{
 		if !taskExists(items,x){
-			items = append(items , todo.Item{Text: x}) 
+			item := todo.Item{Text:x}
+			item.SetPriority(priority)
+			items = append(items , item) 
 		}else{
 			fmt.Println("This task already exists :) ")
 		}
 	}
+
 	// fmt.Println(items)
 	// fmt.Printf("%#v\n",items)
 	err = todo.SaveItems(datafile, items);
@@ -65,6 +71,7 @@ func addRun(cmd *cobra.Command, args []string){
 		fmt.Println("Error saving tasks :(")
 		fmt.Println(err)
 	}
+
 	// todo.SaveItems("x",items)
 }
 func init() {
@@ -79,4 +86,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	addCmd.Flags().IntVarP(&priority, "Priority", "p" , 2  ,"Priority:1,2,3 " )
 }

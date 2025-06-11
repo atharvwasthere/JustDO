@@ -1,1 +1,1 @@
-[{"Text":"Adding Priorities","Priority":0},{"Text":"Order by Priority","Priority":0},{"Text":"Format list ","Priority":1}]
+[{"Text":"Format list ","Priority":1,"Position":3,"Done":false},{"Text":"Order by Priority","Priority":2,"Position":2,"Done":false},{"Text":"Adding Priorities","Priority":3,"Position":1,"Done":true}]

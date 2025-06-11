@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"text/tabwriter"
 
 	"github.com/atharvwasthere/LearningGO/todo"
@@ -20,6 +21,11 @@ var listCmd = &cobra.Command{
 	Long: `When run performs listing of all the Todo's`,
 	Run: func(cmd *cobra.Command, args []string) {
 		items, err := todo.ReadItems(datafile)
+
+		sort.Sort(todo.ByPri(items))
+		for i := range items{
+			items[i].Position = i+1;
+		}
 //func NewWriter(output io.Writer, minwidth, tabwidth, padding int, padchar byte, flags uint) *Writer
 		w :=  tabwriter.NewWriter(os.Stdout , 3, 0, 1, ' ', 0)
 

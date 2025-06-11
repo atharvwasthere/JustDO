@@ -6,6 +6,7 @@ package cmd
 import (
 	// "fmt"
 	"fmt"
+	"log"
 
 	"github.com/atharvwasthere/LearningGO/todo"
 	"github.com/spf13/cobra"
@@ -32,16 +33,37 @@ cmd and args are standard parameters Cobra gives you:
     args → CLI arguments like go run main.go add 1 2
 */
 // new functions are always wriiten outside var addCmd 
+
+func taskExists(items []todo.Item, newText string ) bool{
+	for _,item :=  range items{
+		if item.Text == newText{
+			return true
+		}
+	}
+	return false
+}
+
 func addRun(cmd *cobra.Command, args []string){
 	var items = []todo.Item{} 
+	//"C:/Users/athar/desktop/CS/Golang/Learning CLI/tasks.json"
+	items , err := todo.ReadItems(datafile)
+
+	if err != nil{
+		log.Printf("%v",err)
+	}
 	for _,x := range args{
-		items = append(items , todo.Item{Text: x}) 
+		if !taskExists(items,x){
+			items = append(items , todo.Item{Text: x}) 
+		}else{
+			fmt.Println("This task already exists :) ")
+		}
 	}
 	// fmt.Println(items)
 	// fmt.Printf("%#v\n",items)
-	err := todo.SaveItems("C:/Users/athar/desktop/CS/Golang/Learning CLI/tasks.json", items);
+	err = todo.SaveItems(datafile, items);
 	if err != nil{
-		fmt.Errorf("%v",err)
+		fmt.Println("Error saving tasks :(")
+		fmt.Println(err)
 	}
 	// todo.SaveItems("x",items)
 }

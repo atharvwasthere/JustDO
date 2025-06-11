@@ -8,15 +8,33 @@ import (
 
 type Item struct{
 	Text string
+	Priority int
 }
 // Item is exporteddd
 
 func SaveItems(filename string , items []Item) error {
 	anytask, err := json.Marshal(items) // returns the JSON encoding of items
+	if err !=nil{
+		return err  // marshal error
+	}
 	err = os.WriteFile(filename,anytask,0644) //redeclaring so = not  :=
 	if err != nil{
-		return err
+		return err // writefile err
 	}
 	fmt.Printf(string(anytask))
 	return nil
+}
+
+func ReadItems(filename string )  ([]Item , error) {
+	anytask, err := os.ReadFile(filename)
+	if err != nil{
+		return []Item {} , err
+	}
+	var items []Item
+	err = json.Unmarshal(anytask ,&items);
+	if err != nil{
+		return []Item {} , err
+	}
+	return items , nil
+	
 }

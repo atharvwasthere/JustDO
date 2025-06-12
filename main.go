@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/atharvwasthere/LearningGO/cmd"
+import "github.com/atharvwasthere/JustDO/cmd"
 
 func main() {
 	cmd.Execute()

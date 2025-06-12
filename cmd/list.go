@@ -10,9 +10,15 @@ import (
 	"sort"
 	"text/tabwriter"
 
-	"github.com/atharvwasthere/LearningGO/todo"
+	"github.com/atharvwasthere/JustDO/todo"
 	"github.com/spf13/cobra"
 )
+
+var (
+	doneOpt bool
+	allOpt bool
+)
+
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
@@ -26,14 +32,16 @@ var listCmd = &cobra.Command{
 		for i := range items{
 			items[i].Position = i+1;
 		}
-//func NewWriter(output io.Writer, minwidth, tabwidth, padding int, padchar byte, flags uint) *Writer
+		//func NewWriter(output io.Writer, minwidth, tabwidth, padding int, padchar byte, flags uint) *Writer
 		w :=  tabwriter.NewWriter(os.Stdout , 3, 0, 1, ' ', 0)
-
+		
 		if err!= nil{
 			log.Printf("%v",err)
 		}
 		for _,i := range items{
-			fmt.Fprintln(w ,i.Label() ," ", i.PrettyP()+"\t" + i.Text + "\t")
+			if allOpt || i.Done == doneOpt {
+				fmt.Fprintln(w ,i.Label()+"\t"+i.PrettyDone()+"\t", i.PrettyP()+"\t" + i.Text + "\t")
+			}
 		}
 		w.Flush() // ensuring any incomplete or buffered stuff is treated as  whole and formated 
 	},
@@ -41,6 +49,9 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+
+	listCmd.Flags().BoolVar(&doneOpt,"done",false,"Show 'Done' Todos")
+	listCmd.Flags().BoolVar(&allOpt,"all",false,"Show 'All' Todos" )
 
 	// Here you will define your flags and configuration settings.
 

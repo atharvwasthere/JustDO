@@ -1,4 +1,4 @@
-module github.com/atharvwasthere/LearningGO
+module github.com/atharvwasthere/JustDO
 
 go 1.24.4
 

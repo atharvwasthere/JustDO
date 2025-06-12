@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/atharvwasthere/LearningGO/todo"
+	"github.com/atharvwasthere/JustDO/todo"
 	"github.com/spf13/cobra"
 )
 

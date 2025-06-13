@@ -12,6 +12,7 @@ import (
 
 	"github.com/atharvwasthere/JustDO/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -26,7 +27,7 @@ var listCmd = &cobra.Command{
 	Short: "List the Todo's",
 	Long: `When run performs listing of all the Todo's`,
 	Run: func(cmd *cobra.Command, args []string) {
-		items, err := todo.ReadItems(datafile)
+		items, err := todo.ReadItems(viper.GetString("datafile"))
 
 		sort.Sort(todo.ByPri(items))
 		for i := range items{

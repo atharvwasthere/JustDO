@@ -11,6 +11,7 @@ import (
 
 	"github.com/atharvwasthere/JustDO/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // doneCmd represents the done command
@@ -23,7 +24,7 @@ var doneCmd = &cobra.Command{
 }
 
 func doneRun(cmd *cobra.Command, args []string){
-	items, err := todo.ReadItems(datafile)
+	items, err := todo.ReadItems(viper.GetString("datafile"))
 	if err != nil {
 		fmt.Println("Could not read the file :(", err)
 	}
@@ -32,12 +33,12 @@ func doneRun(cmd *cobra.Command, args []string){
 	if err != nil {
 		log.Fatalln(args[0]," no such task is present")
 	}
-	if i > 0 &&  i < len(items) {
+	if i > 0 &&  i <= len(items) {
 		items[i-1].Done = true
 		fmt.Printf("%q %v\n", items[i-1].Text, "marked done!")
 
 		sort.Sort(todo.ByPri(items))
-		todo.SaveItems(datafile, items)
+		todo.SaveItems(viper.GetString("datafile"), items)
 	} else {
 		log.Println(i, "Doesn't match any items")
 	}

@@ -22,12 +22,12 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"os"               // Used for handling OS-level stuff like exit codes
-	"fmt"             // For printing output to the terminal
-	"log"
+	"fmt" // For printing output to the terminal
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra" // Core CLI framework
-	// "github.com/spf13/viper" // For config management (if using --viper flag or config files)
+	"github.com/spf13/viper" // For config management (if using --viper flag or config files)
+	"log"
+	"os" // Used for handling OS-level stuff like exit codes
 )
 
 
@@ -45,6 +45,7 @@ you accomplish your goals.`,
 }
 
 var datafile string
+var cfgFile string
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -56,6 +57,26 @@ func Execute() {
 	}
 }
 
+// To read in config files and set env if there
+func initConfig() {
+	home, _ := homedir.Dir()
+
+	if cfgFile != "" {
+		viper.SetConfigFile(cfgFile)
+	} else {
+		viper.AddConfigPath(home)
+		viper.SetConfigName(".JustDO")
+	}
+
+	viper.AutomaticEnv()
+
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	}
+}
+
+
+
 func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -65,14 +86,17 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	home , err  :=  homedir.Dir();
-	if err != nil{
+
+	cobra.OnInitialize(initConfig)
+	home, err := homedir.Dir()
+	if err != nil {
 		log.Println("Unable to detect Home Directory. Please set data file path using  --datafile.")
 
 	}
 	// adding flag
-	rootCmd.PersistentFlags().StringVar(&datafile, "datafile" , home+string(os.PathSeparator)+"tasks.json","data file to store todos")
+	rootCmd.PersistentFlags().StringVar(&datafile, "datafile", home+string(os.PathSeparator)+"tasks.json", "data file to store todos")
+	viper.BindPFlag("datafile", rootCmd.PersistentFlags().Lookup("datafile"))
+	viper.BindEnv("datafile") 
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file default is ($HOME/.JustDO.yaml)")
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-

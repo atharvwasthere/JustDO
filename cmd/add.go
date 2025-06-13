@@ -10,6 +10,7 @@ import (
 
 	"github.com/atharvwasthere/JustDO/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // addCmd represents the add command
@@ -49,7 +50,7 @@ func taskExists(items []todo.Item, newText string ) bool{
 func addRun(cmd *cobra.Command, args []string){
 	var items = []todo.Item{} 
 	//"C:/Users/athar/desktop/CS/Golang/Learning CLI/tasks.json"
-	items , err := todo.ReadItems(datafile)
+	items , err := todo.ReadItems(viper.GetString("datafile"))
 
 	if err != nil{
 		log.Printf("%v",err)
@@ -66,7 +67,7 @@ func addRun(cmd *cobra.Command, args []string){
 
 	// fmt.Println(items)
 	// fmt.Printf("%#v\n",items)
-	err = todo.SaveItems(datafile, items);
+	err = todo.SaveItems(viper.GetString("datafile"), items);
 	if err != nil{
 		fmt.Println("Error saving tasks :(")
 		fmt.Println(err)

@@ -66,17 +66,15 @@ brews:
 
 scoops:
   - name: justdo
-    bucket:
+    repository:
       owner: atharvwasthere
       name: scoop-bucket
-    homepage: "https://github.com/atharvwasthere/JustDO"
+    commit_author:
+      name: JustDO CI
+      email: ci@users.noreply.github.com
     description: "JustDO — fast CLI to run your doers"
+    homepage: "https://github.com/atharvwasthere/JustDO"
     license: MIT
-    checkver:
-      url: https://api.github.com/repos/atharvwasthere/JustDO/releases/latest
-      re: '"tag_name":\s*"v?([0-9.]+)"'
-    autoupdate:
-      url: "https://github.com/atharvwasthere/JustDO/releases/download/{{.Tag}}/justdo_{{.Version}}_windows_{{.Arch}}.zip"
 
 release:
   github:

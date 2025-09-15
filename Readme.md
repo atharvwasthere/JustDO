@@ -22,17 +22,37 @@ It helps you stay productive by managing tasks straight from your terminal with 
 
 ## 📦 Installation
 
-1. Clone the repo:
+### 🔹 Option 1: Homebrew (macOS/Linux)
 
-   ```bash
-    git clone https://github.com/atharvwasthere/JustDO.git
-   cd JustDO```
+```bash
+brew tap atharvwasthere/tap
+brew install justdo
+````
 
-2. Build the binary:
+### 🔹 Option 2: Scoop (Windows)
 
-   ```bash
-   go build -o JustDO.exe
-   ```
+```powershell
+scoop bucket add justdo https://github.com/atharvwasthere/scoop-bucket
+scoop install justdo
+```
+
+### 🔹 Option 3: Go Install (requires Go toolchain)
+
+```bash
+go install github.com/atharvwasthere/JustDO@latest
+```
+
+### 🔹 Option 4: Manual Download
+
+Head over to the [Releases](https://github.com/atharvwasthere/JustDO/releases) page and download the binary for your OS/arch.
+
+### 🔹 Option 5: Build from Source
+
+```bash
+git clone https://github.com/atharvwasthere/JustDO.git
+cd JustDO
+go build -o justdo .
+```
 
 ---
 

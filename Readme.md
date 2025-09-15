@@ -70,6 +70,12 @@ go build -o justdo .
 ./JustDO.exe list
 ```
 
+### 📋 List All/Done Tasks
+
+```bash
+./JustDO.exe list --all/done
+```
+
 ### ✅ Mark a Task as Done
 
 ```bash

@@ -1,3 +1,6 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
 project_name: justdo
 
 before:
@@ -10,15 +13,22 @@ builds:
     binary: justdo
     env:
       - CGO_ENABLED=0
+    flags:
+      - -trimpath
     ldflags:
       - -s -w -X main.version={{.Version}}
-    goos: [linux, darwin, windows]
-    goarch: [amd64, arm64]
-    flags: [-trimpath]
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
 
 archives:
   - id: justdo-archives
-    builds: [justdo]
+    builds:
+      - justdo
     format_overrides:
       - goos: windows
         format: zip
@@ -31,6 +41,7 @@ checksum:
   name_template: 'checksums_{{ .Version }}.txt'
 
 changelog:
+  use: git
   sort: asc
   filters:
     exclude:
@@ -61,7 +72,6 @@ scoops:
     homepage: "https://github.com/atharvwasthere/JustDO"
     description: "JustDO — fast CLI to run your doers"
     license: MIT
-    persist: []
     checkver:
       url: https://api.github.com/repos/atharvwasthere/JustDO/releases/latest
       re: '"tag_name":\s*"v?([0-9.]+)"'

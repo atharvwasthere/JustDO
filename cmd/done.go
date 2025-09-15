@@ -1,6 +1,7 @@
 /*
 Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 */
+
 package cmd
 
 import (
@@ -16,33 +17,44 @@ import (
 
 // doneCmd represents the done command
 var doneCmd = &cobra.Command{
-	Use:   "done",
+	Use:     "done",
 	Aliases: []string{"do"},
 	Short: "Mark Items as Done!",
 	Long: `Changes the Pending tasks as done and removes from the respective file`,
 	Run: doneRun,
 }
 
-func doneRun(cmd *cobra.Command, args []string){
+// doneRun executes the done command functionality
+func doneRun(cmd *cobra.Command, args []string) {
+	// Read existing items from data file
 	items, err := todo.ReadItems(viper.GetString("datafile"))
 	if err != nil {
 		fmt.Println("Could not read the file :(", err)
+		return
 	}
-	i, err := strconv.Atoi(args[0])
 
-	if err != nil {
-		log.Fatalln(args[0]," no such task is present")
+	// Validate arguments
+	if len(args) == 0 {
+		log.Fatalln("Please provide a task number")
 	}
-	if i > 0 &&  i <= len(items) {
+
+	// Parse task number
+	i, err := strconv.Atoi(args[0])
+	if err != nil {
+		log.Fatalln(args[0], "is not a valid task number")
+	}
+
+	// Mark task as done if valid index
+	if i > 0 && i <= len(items) {
 		items[i-1].Done = true
 		fmt.Printf("%q %v\n", items[i-1].Text, "marked done!")
 
+		// Sort and save updated items
 		sort.Sort(todo.ByPri(items))
 		todo.SaveItems(viper.GetString("datafile"), items)
 	} else {
-		log.Println(i, "Doesn't match any items")
+		log.Println(i, "doesn't match any items")
 	}
-
 }
 
 func init() {

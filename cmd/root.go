@@ -23,19 +23,18 @@ package cmd
 
 import (
 	"fmt" // For printing output to the terminal
+	"log"
+	"os" // Used for handling OS-level stuff like exit codes
+
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra" // Core CLI framework
 	"github.com/spf13/viper" // For config management (if using --viper flag or config files)
-	"log"
-	"os" // Used for handling OS-level stuff like exit codes
 )
-
-
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "JustDO",
-	Short: "JustDO is a todo application1",
+	Short: "JustDO is a todo application",
 	Long: `JustDO will help you get more done in less time.
 It's designed to be as simple as possible to help
 you accomplish your goals.`,
@@ -75,8 +74,6 @@ func initConfig() {
 	}
 }
 
-
-
 func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -96,7 +93,7 @@ func init() {
 	// adding flag
 	rootCmd.PersistentFlags().StringVar(&datafile, "datafile", home+string(os.PathSeparator)+"tasks.json", "data file to store todos")
 	viper.BindPFlag("datafile", rootCmd.PersistentFlags().Lookup("datafile"))
-	viper.BindEnv("datafile") 
+	viper.BindEnv("datafile")
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file default is ($HOME/.JustDO.yaml)")
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

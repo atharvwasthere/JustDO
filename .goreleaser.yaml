@@ -1,0 +1,76 @@
+project_name: justdo
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: justdo
+    main: ./cmd/justdo
+    binary: justdo
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+
+archives:
+  - id: justdo-archives
+    builds: [justdo]
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: 'checksums_{{ .Version }}.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+brews:
+  - name: justdo
+    repository:
+      owner: atharvwasthere
+      name: homebrew-tap
+    commit_author:
+      name: JustDO CI
+      email: ci@users.noreply.github.com
+    directory: Formula
+    description: "JustDO — fast CLI to run your doers"
+    homepage: "https://github.com/atharvwasthere/JustDO"
+    install: |
+      bin.install "justdo"
+    test: |
+      system "#{bin}/justdo", "--version"
+
+scoops:
+  - name: justdo
+    bucket:
+      owner: atharvwasthere
+      name: scoop-bucket
+    homepage: "https://github.com/atharvwasthere/JustDO"
+    description: "JustDO — fast CLI to run your doers"
+    license: MIT
+    persist: []
+    checkver:
+      url: https://api.github.com/repos/atharvwasthere/JustDO/releases/latest
+      re: '"tag_name":\s*"v?([0-9.]+)"'
+    autoupdate:
+      url: "https://github.com/atharvwasthere/JustDO/releases/download/{{.Tag}}/justdo_{{.Version}}_windows_{{.Arch}}.zip"
+
+release:
+  github:
+    owner: atharvwasthere
+    name: JustDO
+  draft: false
+  prerelease: false

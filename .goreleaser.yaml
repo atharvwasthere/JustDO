@@ -9,7 +9,7 @@ before:
 
 builds:
   - id: justdo
-    main: ./cmd/justdo
+    main: .
     binary: justdo
     env:
       - CGO_ENABLED=0
@@ -27,8 +27,6 @@ builds:
 
 archives:
   - id: justdo-archives
-    builds:
-      - justdo
     format_overrides:
       - goos: windows
         format: zip
